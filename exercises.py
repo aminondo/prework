@@ -13,7 +13,7 @@ def list_to_index_map(x):
 
     Returns: a dictionary mapping each list element to its index
     """
-    raise NotImplementedError()
+    return {x[i]: i for i in range(0,len(x))}
 
 
 def list_to_index_map_test():
@@ -41,18 +41,27 @@ def softmax(h):
 
     Returns: a batch_size x n_classes Tensor with softmax values
     """
-    raise NotImplementedError()
+    #h -= np.max(h)
+    #sum of all exps
+    #tot = np.sum(tf.exp(h))
+    prob = tf.exp(h) / tf.reduce_sum(tf.exp(h), axis=1,keep_dims=True)
+    return prob
+
+
+    #raise NotImplementedError()
 
 
 def softmax_test():
     X = tf.random_uniform((10, 5))
     X_tf, X_mn = tf.Session().run([tf.nn.softmax(X), softmax(X)])
     if not np.allclose(X_tf, X_mn):
-        raise Exception("TEST FAILED!\n\n{0}\n\n{1}".format(X_tf, X_mn))
+        raise Exception("TEST FAILED!\n\n{0}\n\n{1}\n\n{2}".format(X_tf, X_mn, np.sum(X_tf)))
     print("TEST PASSED!")
 
 
+
 if __name__ == '__main__':
+
     if len(sys.argv) < 2:
         raise Exception("No problem number provided")
     N = sys.argv[1]
